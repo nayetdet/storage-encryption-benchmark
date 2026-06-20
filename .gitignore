@@ -3,5 +3,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+.vscode/
+.cache/matplotlib/
 containers/
 benchmark_data/
