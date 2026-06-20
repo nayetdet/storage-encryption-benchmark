@@ -1,7 +1,7 @@
-timestamp,scenario,target,iteration,operation,io_mode,bytes,wall_seconds,throughput_mb_s,system_cpu_seconds,system_cpu_percent,system_cpu_seconds_per_gib
-2026-06-19T17:48:00,Sem criptografia,benchmark_data/sem_criptografia,1,write,direct,536870912,0.842311,607.88,0.159300,18.92,0.318600
-2026-06-19T17:48:01,Sem criptografia,benchmark_data/sem_criptografia,1,read,direct,536870912,0.391224,1308.68,0.096200,14.77,0.192400
-2026-06-19T17:48:03,LUKS,/mnt/luks_container,1,write,direct,536870912,1.104882,463.40,0.351900,31.84,0.703800
-2026-06-19T17:48:04,LUKS,/mnt/luks_container,1,read,direct,536870912,0.612991,835.25,0.161500,26.35,0.323000
-2026-06-19T17:48:06,VeraCrypt,/home/isaac/veracrypt_container,1,write,direct,536870912,1.221804,419.05,0.429100,35.12,0.858200
-2026-06-19T17:48:07,VeraCrypt,/home/isaac/veracrypt_container,1,read,direct,536870912,0.691432,740.49,0.206000,29.80,0.412000
+timestamp,scenario,target,iteration,operation,io_mode,bytes,wall_seconds,throughput_mb_s,system_cpu_seconds,system_user_cpu_seconds,system_kernel_cpu_seconds,system_cpu_percent,system_user_cpu_percent,system_kernel_cpu_percent,system_cpu_seconds_per_gib,system_user_cpu_seconds_per_gib,system_kernel_cpu_seconds_per_gib,process_user_cpu_seconds,process_kernel_cpu_seconds,process_cpu_seconds
+2026-06-19T17:48:00,Sem criptografia,benchmark_data/sem_criptografia,1,write,direct,536870912,0.842311,607.88,0.159300,0.041000,0.118300,18.92,4.87,14.05,0.318600,0.082000,0.236600,0.000000,0.074000,0.074000
+2026-06-19T17:48:01,Sem criptografia,benchmark_data/sem_criptografia,1,read,direct,536870912,0.391224,1308.68,0.096200,0.025000,0.071200,14.77,3.84,10.93,0.192400,0.050000,0.142400,0.000000,0.052000,0.052000
+2026-06-19T17:48:03,LUKS,/mnt/luks_container,1,write,direct,536870912,1.104882,463.40,0.351900,0.081900,0.270000,31.84,7.41,24.43,0.703800,0.163800,0.540000,0.000000,0.102000,0.102000
+2026-06-19T17:48:04,LUKS,/mnt/luks_container,1,read,direct,536870912,0.612991,835.25,0.161500,0.031500,0.130000,26.35,5.14,21.21,0.323000,0.063000,0.260000,0.000000,0.074000,0.074000
+2026-06-19T17:48:06,VeraCrypt,/home/isaac/veracrypt_container,1,write,direct,536870912,1.221804,419.05,0.429100,0.099100,0.330000,35.12,8.11,27.01,0.858200,0.198200,0.660000,0.000000,0.121000,0.121000
+2026-06-19T17:48:07,VeraCrypt,/home/isaac/veracrypt_container,1,read,direct,536870912,0.691432,740.49,0.206000,0.046000,0.160000,29.80,6.65,23.15,0.412000,0.092000,0.320000,0.000000,0.083000,0.083000

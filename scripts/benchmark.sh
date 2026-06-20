@@ -3,6 +3,7 @@ set -euo pipefail
 
 RESULTS_DIR="${RESULTS_DIR:-results}"
 OUTPUT="${OUTPUT:-$RESULTS_DIR/benchmark.csv}"
+ERROR_OUTPUT="${ERROR_OUTPUT:-$RESULTS_DIR/benchmark_errors.csv}"
 GRAPH_DIR="${GRAPH_DIR:-$RESULTS_DIR/graficos}"
 FILE_SIZE_MB="${FILE_SIZE_MB:-512}"
 ITERATIONS="${ITERATIONS:-5}"
@@ -40,31 +41,91 @@ fi
 mkdir -p "$RESULTS_DIR" "$GRAPH_DIR"
 export MPLCONFIGDIR="${MPLCONFIGDIR:-$RESULTS_DIR/matplotlib-cache}"
 mkdir -p "$MPLCONFIGDIR"
-rm -f "$OUTPUT"
+rm -f "$OUTPUT" "$ERROR_OUTPUT"
 
-run_case() {
+csv_escape() {
+  local value="${1//\"/\"\"}"
+  printf '"%s"' "$value"
+}
+
+write_error() {
+  local scenario="$1"
+  local target="$2"
+  local stage="$3"
+  local message="$4"
+
+  if [[ ! -e "$ERROR_OUTPUT" ]]; then
+    printf "timestamp,scenario,target,stage,message\n" > "$ERROR_OUTPUT"
+  fi
+
+  {
+    csv_escape "$(date --iso-8601=seconds)"
+    printf ","
+    csv_escape "$scenario"
+    printf ","
+    csv_escape "$target"
+    printf ","
+    csv_escape "$stage"
+    printf ","
+    csv_escape "$message"
+    printf "\n"
+  } >> "$ERROR_OUTPUT"
+}
+
+validate_case() {
   local name="$1"
   local path="$2"
 
   if [[ ! -d "$path" ]]; then
-    echo "Ignorando $name: caminho nao existe ($path)." >&2
-    return 0
+    write_error "$name" "$path" "precheck" "caminho nao existe"
+    return 1
   fi
 
   if [[ ! -w "$path" ]]; then
-    echo "Ignorando $name: caminho sem permissao de escrita ($path)." >&2
-    return 0
+    write_error "$name" "$path" "precheck" "caminho sem permissao de escrita"
+    return 1
   fi
 
+  return 0
+}
+
+run_case() {
+  local name="$1"
+  local path="$2"
+  local error_log
+
   echo "Executando $name em $path..."
-  "$PYTHON_BIN" scripts/medir_io.py \
+  error_log="$(mktemp)"
+
+  if ! "$PYTHON_BIN" scripts/medir_io.py \
     --scenario "$name" \
     --target "$path" \
     --file-size-mb "$FILE_SIZE_MB" \
     --iterations "$ITERATIONS" \
     --block-mb "$BLOCK_MB" \
-    --output "$OUTPUT"
+    --output "$OUTPUT" 2>"$error_log"; then
+    local message
+    message="$(tr '\n' ' ' < "$error_log")"
+    write_error "$name" "$path" "execution" "${message:-medicao falhou}"
+    cat "$error_log" >&2
+    rm -f "$error_log"
+    echo "Benchmark interrompido por erro em $name. Detalhes em: $ERROR_OUTPUT" >&2
+    exit 1
+  fi
+
+  rm -f "$error_log"
 }
+
+validation_errors=0
+validate_case "Sem criptografia" "$NORMAL_PATH" || validation_errors=$((validation_errors + 1))
+validate_case "LUKS" "$LUKS_PATH" || validation_errors=$((validation_errors + 1))
+validate_case "VeraCrypt" "$VERACRYPT_PATH" || validation_errors=$((validation_errors + 1))
+
+if (( validation_errors > 0 )); then
+  echo "Benchmark interrompido: $validation_errors cenario(s) indisponivel(is)." >&2
+  echo "Detalhes em: $ERROR_OUTPUT" >&2
+  exit 1
+fi
 
 run_case "Sem criptografia" "$NORMAL_PATH"
 run_case "LUKS" "$LUKS_PATH"
@@ -80,3 +141,4 @@ echo "Cenarios registrados:"
 tail -n +2 "$OUTPUT" | cut -d, -f2 | awk '!vistos[$0]++ { print "  - " $0 }'
 
 "$PYTHON_BIN" scripts/gerar_graficos.py --input "$OUTPUT" --output-dir "$GRAPH_DIR"
+echo "Resumo estatistico salvo em: $RESULTS_DIR/resumo_estatistico.csv"

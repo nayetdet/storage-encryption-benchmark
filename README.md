@@ -2,30 +2,30 @@
 
 Tema: Benchmark de desempenho comparando armazenamento sem criptografia, LUKS e VeraCrypt.
 
-O projeto mede operacoes reais de leitura e escrita em tres caminhos:
+O projeto mede operações reais de leitura e escrita em três caminhos:
 
 1. Um container ext4 comum, sem criptografia.
 2. Um ponto de montagem LUKS.
 3. Um ponto de montagem VeraCrypt.
 
-O `setup.sh` cria e monta os containers. O `benchmark.sh` mede tempo, vazao e uso de CPU ao escrever e ler arquivos reais nesses caminhos.
+O `setup.sh` cria e monta os containers. O `benchmark.sh` mede tempo, vazão e uso de CPU ao escrever e ler arquivos reais nesses caminhos.
 
 ## Estrutura
 
 - `scripts/setup.sh`: cria, abre e monta os containers sem criptografia, LUKS e VeraCrypt.
-- `scripts/benchmark.sh`: orquestra o benchmark, salva CSV e chama a geracao de graficos.
+- `scripts/benchmark.sh`: orquestra o benchmark, salva CSV e chama a geração de gráficos.
 - `scripts/medir_io.py`: mede escrita/leitura com `dd` em I/O direto.
-- `scripts/gerar_graficos.py`: gera os graficos a partir do CSV.
+- `scripts/gerar_graficos.py`: gera os gráficos a partir do CSV.
 - `scripts/down.sh`: desmonta e fecha os containers.
-- `requirements.txt`: dependencia Python para gerar os graficos.
-- `exemplos/config_exemplo.env`: exemplo de configuracao dos caminhos.
-- `exemplos/resultado_exemplo.csv`: exemplo do formato de saida.
-- `docs/resumo.md`: resumo de ate uma pagina.
+- `requirements.txt`: dependência Python para gerar os gráficos.
+- `exemplos/config_exemplo.env`: exemplo de configuração dos caminhos.
+- `exemplos/resultado_exemplo.csv`: exemplo do formato de saída.
+- `docs/resumo.md`: resumo de até uma página.
 - `docs/validacao_entrega.md`: checklist de conformidade.
-- `docs/roteiro_video_3min.md`: roteiro sugerido para o video.
-- `docs/preparar_volumes.md`: orientacao para preparar os volumes antes do benchmark.
+- `docs/roteiro_video_3min.md`: roteiro sugerido para o vídeo.
+- `docs/preparar_volumes.md`: orientação para preparar os volumes antes do benchmark.
 
-## Instalar dependencias
+## Instalar dependências
 
 ```bash
 python3 -m venv .venv
@@ -58,6 +58,10 @@ O script gera:
 - `results/graficos/tempo_operacao.png`
 - `results/graficos/vazao_operacao.png`
 - `results/graficos/cpu_operacao.png`, custo de CPU do sistema em CPU-s/GiB.
+- `results/graficos/cpu_user_operacao.png`, custo de CPU em user space.
+- `results/graficos/cpu_kernel_operacao.png`, custo de CPU em kernel space.
+- `results/resumo_estatistico.csv`, média, mediana, desvio padrão, mínimo, máximo e amostras por métrica.
+- `results/benchmark_errors.csv`, somente se algum cenário falhar na validação ou execução.
 
 Para desmontar depois:
 
@@ -67,29 +71,38 @@ Para desmontar depois:
 
 ## Sobre Docker
 
-Nao e recomendado rodar este benchmark dentro de Docker comum. LUKS e VeraCrypt dependem de montagem de volumes pelo sistema operacional e normalmente exigem privilegios do host. Um container Docker teria que rodar com `--privileged`, o que deixa o teste menos portavel e pode distorcer os resultados de E/S. Por isso, o projeto automatiza a criacao/montagem dos containers de armazenamento no host.
+Não é recomendado rodar este benchmark dentro de Docker comum. LUKS e VeraCrypt dependem de montagem de volumes pelo sistema operacional e normalmente exigem privilégios do host. Um container Docker teria que rodar com `--privileged`, o que deixa o teste menos portátil e pode distorcer os resultados de E/S. Por isso, o projeto automatiza a criação/montagem dos containers de armazenamento no host.
 
-## Metricas
+## Métricas
 
 - Tempo de escrita.
 - Tempo de leitura.
-- Vazao em MB/s.
+- Vazão em MB/s.
 - Tempo real de parede (`wall_seconds`).
-- Vazao real calculada por bytes processados / tempo real (`throughput_mb_s`).
-- Uso de CPU do sistema durante a operacao (`system_cpu_seconds`, `system_cpu_percent`, `system_cpu_seconds_per_gib`).
+- Vazão real calculada por bytes processados / tempo real (`throughput_mb_s`).
+- Uso de CPU do sistema durante a operação (`system_cpu_seconds`, `system_cpu_percent`, `system_cpu_seconds_per_gib`).
+- Uso de CPU do sistema separado entre user space e kernel space (`system_user_*`, `system_kernel_*`).
+- Uso de CPU do processo `dd` separado entre user space e kernel space (`process_user_cpu_seconds`, `process_kernel_cpu_seconds`).
+- Estatísticas por cenário e operação: média, mediana, desvio padrão, mínimo, máximo e número de amostras.
 - Modo de E/S (`io_mode=direct`).
 - Tamanho processado.
-- Cenario medido.
+- Cenário medido.
 
-Os resultados variam de acordo com hardware, cache do sistema operacional, tamanho do arquivo, numero de repeticoes e configuracao dos volumes. O baseline sem criptografia tambem usa um arquivo-container para reduzir distorcoes causadas por comparar uma pasta comum com volumes montados.
+Os resultados variam de acordo com hardware, cache do sistema operacional, tamanho do arquivo, número de repetições e configuração dos volumes. O baseline sem criptografia também usa um arquivo-container para reduzir distorções causadas por comparar uma pasta comum com volumes montados.
 
-## Como as metricas sao medidas
+O benchmark valida todos os cenários antes de iniciar. Se algum caminho não existir, estiver sem permissão de escrita ou falhar durante a medição, a execução é interrompida e o erro é registrado em `results/benchmark_errors.csv`. Isso evita comparar resultados com cenários ausentes ou número desigual de amostras.
+
+## Como as métricas são medidas
 
 - Escrita real: `dd if=/dev/zero of=arquivo oflag=direct conv=fdatasync`.
 - Leitura real: `dd if=arquivo of=/dev/null iflag=direct`.
-- Tempo real: medido com relogio de parede em torno do comando `dd`.
-- Vazao real: bytes processados divididos pelo tempo real.
-- CPU do sistema: diferenca de uso da CPU total em `/proc/stat` durante a operacao.
-- Grafico principal de CPU: usa CPU-s/GiB, pois percentual de CPU sozinho pode enganar quando uma operacao termina mais rapido.
+- Tempo real: medido com relógio de parede em torno do comando `dd`.
+- Vazão real: bytes processados divididos pelo tempo real.
+- CPU do sistema: diferença de uso da CPU total em `/proc/stat` durante a operação.
+- CPU em user space do sistema: campos `user + nice` de `/proc/stat`.
+- CPU em kernel space do sistema: campos `system + irq + softirq` de `/proc/stat`.
+- CPU do processo: tempos `ru_utime` e `ru_stime` retornados por `wait4` para o processo `dd`.
+- Gráfico principal de CPU: usa CPU-s/GiB, pois percentual de CPU sozinho pode enganar quando uma operação termina mais rápido.
+- Desvio padrão: calculado entre as repetições de cada par cenário/operação e exibido como barra de erro nos gráficos. Cada barra também mostra o valor da média e do desvio padrão.
 
-Use arquivos maiores, como `FILE_SIZE_MB=512` ou `FILE_SIZE_MB=1024`. Valores pequenos, como 4 MB ou 64 MB, duram pouco e podem gerar CPU instavel por causa da resolucao da medicao e de atividade paralela do sistema.
+Use arquivos maiores, como `FILE_SIZE_MB=512` ou `FILE_SIZE_MB=1024`. Valores pequenos, como 4 MB ou 64 MB, duram pouco e podem gerar CPU instável por causa da resolução da medição e de atividade paralela do sistema.
