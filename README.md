@@ -4,15 +4,15 @@ Tema: Benchmark de desempenho comparando armazenamento sem criptografia, LUKS e 
 
 O projeto mede operacoes reais de leitura e escrita em tres caminhos:
 
-1. Uma pasta comum sem criptografia.
+1. Um container ext4 comum, sem criptografia.
 2. Um ponto de montagem LUKS.
 3. Um ponto de montagem VeraCrypt.
 
-O `setup.sh` cria e monta os containers criptografados. O `benchmark.sh` mede tempo, vazao e uso de CPU ao escrever e ler arquivos reais nesses caminhos.
+O `setup.sh` cria e monta os containers. O `benchmark.sh` mede tempo, vazao e uso de CPU ao escrever e ler arquivos reais nesses caminhos.
 
 ## Estrutura
 
-- `scripts/setup.sh`: cria, abre e monta os containers LUKS e VeraCrypt.
+- `scripts/setup.sh`: cria, abre e monta os containers sem criptografia, LUKS e VeraCrypt.
 - `scripts/benchmark.sh`: orquestra o benchmark, salva CSV e chama a geracao de graficos.
 - `scripts/medir_io.py`: mede escrita/leitura com `dd` em I/O direto.
 - `scripts/gerar_graficos.py`: gera os graficos a partir do CSV.
@@ -44,7 +44,7 @@ Prepare os volumes:
 Depois rode:
 
 ```bash
-NORMAL_PATH=benchmark_data/sem_criptografia \
+NORMAL_PATH=/mnt/plain_container \
 LUKS_PATH=/mnt/luks_container \
 VERACRYPT_PATH="$HOME/veracrypt_container" \
 FILE_SIZE_MB=512 \
@@ -81,7 +81,7 @@ Nao e recomendado rodar este benchmark dentro de Docker comum. LUKS e VeraCrypt 
 - Tamanho processado.
 - Cenario medido.
 
-Os resultados variam de acordo com hardware, cache do sistema operacional, tamanho do arquivo, numero de repeticoes e configuracao dos volumes criptografados.
+Os resultados variam de acordo com hardware, cache do sistema operacional, tamanho do arquivo, numero de repeticoes e configuracao dos volumes. O baseline sem criptografia tambem usa um arquivo-container para reduzir distorcoes causadas por comparar uma pasta comum com volumes montados.
 
 ## Como as metricas sao medidas
 

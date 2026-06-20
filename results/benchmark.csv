@@ -1,31 +1,31 @@
 timestamp,scenario,target,iteration,operation,io_mode,bytes,wall_seconds,throughput_mb_s,system_cpu_seconds,system_cpu_percent,system_cpu_seconds_per_gib
-2026-06-20T12:26:04,Sem criptografia,benchmark_data/sem_criptografia,1,write,direct,536870912,0.249077,2055.59,0.150000,7.69,0.300000
-2026-06-20T12:26:04,Sem criptografia,benchmark_data/sem_criptografia,1,read,direct,536870912,0.266574,1920.66,0.240000,11.37,0.480000
-2026-06-20T12:26:05,Sem criptografia,benchmark_data/sem_criptografia,2,write,direct,536870912,0.301090,1700.49,0.590000,24.79,1.180000
-2026-06-20T12:26:05,Sem criptografia,benchmark_data/sem_criptografia,2,read,direct,536870912,0.226084,2264.64,0.230000,13.07,0.460000
-2026-06-20T12:26:05,Sem criptografia,benchmark_data/sem_criptografia,3,write,direct,536870912,0.264702,1934.25,0.210000,10.00,0.420000
-2026-06-20T12:26:05,Sem criptografia,benchmark_data/sem_criptografia,3,read,direct,536870912,0.227828,2247.31,0.220000,12.29,0.440000
-2026-06-20T12:26:06,Sem criptografia,benchmark_data/sem_criptografia,4,write,direct,536870912,0.255715,2002.23,0.150000,7.39,0.300000
-2026-06-20T12:26:06,Sem criptografia,benchmark_data/sem_criptografia,4,read,direct,536870912,0.238715,2144.81,0.280000,14.97,0.560000
-2026-06-20T12:26:06,Sem criptografia,benchmark_data/sem_criptografia,5,write,direct,536870912,0.278885,1835.88,0.330000,15.00,0.660000
-2026-06-20T12:26:06,Sem criptografia,benchmark_data/sem_criptografia,5,read,direct,536870912,0.224152,2284.17,0.670000,38.29,1.340000
-2026-06-20T12:26:07,LUKS,/mnt/luks_container,1,write,direct,536870912,0.472885,1082.71,1.040000,28.34,2.080000
-2026-06-20T12:26:07,LUKS,/mnt/luks_container,1,read,direct,536870912,0.192978,2653.15,0.910000,59.87,1.820000
-2026-06-20T12:26:08,LUKS,/mnt/luks_container,2,write,direct,536870912,0.617169,829.60,1.950000,40.04,3.900000
-2026-06-20T12:26:08,LUKS,/mnt/luks_container,2,read,direct,536870912,0.193894,2640.61,0.860000,57.72,1.720000
-2026-06-20T12:26:08,LUKS,/mnt/luks_container,3,write,direct,536870912,0.451721,1133.44,0.960000,27.12,1.920000
-2026-06-20T12:26:09,LUKS,/mnt/luks_container,3,read,direct,536870912,0.140807,3636.18,0.550000,48.67,1.100000
-2026-06-20T12:26:09,LUKS,/mnt/luks_container,4,write,direct,536870912,0.462027,1108.16,0.860000,23.69,1.720000
-2026-06-20T12:26:09,LUKS,/mnt/luks_container,4,read,direct,536870912,0.122764,4170.61,0.430000,43.88,0.860000
-2026-06-20T12:26:10,LUKS,/mnt/luks_container,5,write,direct,536870912,0.437119,1171.31,0.880000,25.58,1.760000
-2026-06-20T12:26:10,LUKS,/mnt/luks_container,5,read,direct,536870912,0.198193,2583.34,1.020000,64.56,2.040000
-2026-06-20T12:26:10,VeraCrypt,/home/isaac/veracrypt_container,1,write,direct,536870912,0.625948,817.96,2.750000,56.82,5.500000
-2026-06-20T12:26:11,VeraCrypt,/home/isaac/veracrypt_container,1,read,direct,536870912,0.169274,3024.69,0.810000,60.45,1.620000
-2026-06-20T12:26:11,VeraCrypt,/home/isaac/veracrypt_container,2,write,direct,536870912,0.527606,970.42,1.740000,41.73,3.480000
-2026-06-20T12:26:11,VeraCrypt,/home/isaac/veracrypt_container,2,read,direct,536870912,0.244897,2090.67,1.450000,74.74,2.900000
-2026-06-20T12:26:12,VeraCrypt,/home/isaac/veracrypt_container,3,write,direct,536870912,0.596359,858.54,2.190000,47.00,4.380000
-2026-06-20T12:26:12,VeraCrypt,/home/isaac/veracrypt_container,3,read,direct,536870912,0.279873,1829.40,1.630000,73.09,3.260000
-2026-06-20T12:26:13,VeraCrypt,/home/isaac/veracrypt_container,4,write,direct,536870912,0.580007,882.75,1.990000,43.54,3.980000
-2026-06-20T12:26:13,VeraCrypt,/home/isaac/veracrypt_container,4,read,direct,536870912,0.173937,2943.60,0.870000,60.00,1.740000
-2026-06-20T12:26:14,VeraCrypt,/home/isaac/veracrypt_container,5,write,direct,536870912,0.517921,988.57,1.550000,38.27,3.100000
-2026-06-20T12:26:14,VeraCrypt,/home/isaac/veracrypt_container,5,read,direct,536870912,0.191809,2669.32,1.000000,66.23,2.000000
+2026-06-20T13:14:03,Sem criptografia,/mnt/plain_container,1,write,direct,536870912,0.415489,1232.28,0.350000,10.64,0.700000
+2026-06-20T13:14:03,Sem criptografia,/mnt/plain_container,1,read,direct,536870912,0.115187,4444.95,0.120000,13.48,0.240000
+2026-06-20T13:14:04,Sem criptografia,/mnt/plain_container,2,write,direct,536870912,0.533909,958.96,0.770000,18.20,1.540000
+2026-06-20T13:14:04,Sem criptografia,/mnt/plain_container,2,read,direct,536870912,0.087265,5867.17,0.110000,15.94,0.220000
+2026-06-20T13:14:04,Sem criptografia,/mnt/plain_container,3,write,direct,536870912,0.420067,1218.85,0.320000,9.64,0.640000
+2026-06-20T13:14:04,Sem criptografia,/mnt/plain_container,3,read,direct,536870912,0.103574,4943.32,0.130000,15.85,0.260000
+2026-06-20T13:14:05,Sem criptografia,/mnt/plain_container,4,write,direct,536870912,0.405060,1264.01,0.340000,10.66,0.680000
+2026-06-20T13:14:05,Sem criptografia,/mnt/plain_container,4,read,direct,536870912,0.096613,5299.51,0.170000,22.08,0.340000
+2026-06-20T13:14:05,Sem criptografia,/mnt/plain_container,5,write,direct,536870912,0.394777,1296.93,0.900000,28.85,1.800000
+2026-06-20T13:14:05,Sem criptografia,/mnt/plain_container,5,read,direct,536870912,0.093823,5457.07,0.150000,20.27,0.300000
+2026-06-20T13:14:06,LUKS,/mnt/luks_container,1,write,direct,536870912,0.505563,1012.73,0.870000,21.80,1.740000
+2026-06-20T13:14:06,LUKS,/mnt/luks_container,1,read,direct,536870912,0.122127,4192.35,0.430000,43.00,0.860000
+2026-06-20T13:14:07,LUKS,/mnt/luks_container,2,write,direct,536870912,0.543292,942.40,0.920000,21.60,1.840000
+2026-06-20T13:14:07,LUKS,/mnt/luks_container,2,read,direct,536870912,0.113007,4530.68,0.360000,40.45,0.720000
+2026-06-20T13:14:07,LUKS,/mnt/luks_container,3,write,direct,536870912,0.555426,921.82,0.820000,18.51,1.640000
+2026-06-20T13:14:07,LUKS,/mnt/luks_container,3,read,direct,536870912,0.119208,4295.01,0.360000,39.56,0.720000
+2026-06-20T13:14:08,LUKS,/mnt/luks_container,4,write,direct,536870912,0.601855,850.70,0.860000,18.11,1.720000
+2026-06-20T13:14:08,LUKS,/mnt/luks_container,4,read,direct,536870912,0.112614,4546.50,0.350000,40.70,0.700000
+2026-06-20T13:14:09,LUKS,/mnt/luks_container,5,write,direct,536870912,0.555072,922.40,0.910000,20.82,1.820000
+2026-06-20T13:14:09,LUKS,/mnt/luks_container,5,read,direct,536870912,0.110319,4641.07,0.360000,41.38,0.720000
+2026-06-20T13:14:10,VeraCrypt,/home/isaac/veracrypt_container,1,write,direct,536870912,0.935426,547.34,1.070000,14.56,2.140000
+2026-06-20T13:14:10,VeraCrypt,/home/isaac/veracrypt_container,1,read,direct,536870912,0.187998,2723.43,1.100000,72.85,2.200000
+2026-06-20T13:14:11,VeraCrypt,/home/isaac/veracrypt_container,2,write,direct,536870912,1.220148,419.62,2.370000,24.51,4.740000
+2026-06-20T13:14:11,VeraCrypt,/home/isaac/veracrypt_container,2,read,direct,536870912,0.181226,2825.20,0.920000,63.01,1.840000
+2026-06-20T13:14:13,VeraCrypt,/home/isaac/veracrypt_container,3,write,direct,536870912,1.485870,344.58,2.410000,20.74,4.820000
+2026-06-20T13:14:13,VeraCrypt,/home/isaac/veracrypt_container,3,read,direct,536870912,0.263698,1941.62,1.390000,65.88,2.780000
+2026-06-20T13:14:14,VeraCrypt,/home/isaac/veracrypt_container,4,write,direct,536870912,1.116123,458.73,2.880000,32.73,5.760000
+2026-06-20T13:14:14,VeraCrypt,/home/isaac/veracrypt_container,4,read,direct,536870912,0.184739,2771.47,0.870000,61.70,1.740000
+2026-06-20T13:14:16,VeraCrypt,/home/isaac/veracrypt_container,5,write,direct,536870912,2.089741,245.01,2.490000,15.21,4.980000
+2026-06-20T13:14:17,VeraCrypt,/home/isaac/veracrypt_container,5,read,direct,536870912,0.160267,3194.67,0.840000,61.76,1.680000

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PLAIN_CONTAINER="${PLAIN_CONTAINER:-containers/plain_container.img}"
+PLAIN_PATH="${PLAIN_PATH:-/mnt/plain_container}"
+PLAIN_SIZE="${PLAIN_SIZE:-1G}"
+
 LUKS_CONTAINER="${LUKS_CONTAINER:-containers/luks_container.img}"
 LUKS_MAPPER_NAME="${LUKS_MAPPER_NAME:-luks_bench}"
 LUKS_PATH="${LUKS_PATH:-/mnt/luks_container}"
@@ -9,6 +13,32 @@ LUKS_SIZE="${LUKS_SIZE:-1G}"
 VERACRYPT_CONTAINER="${VERACRYPT_CONTAINER:-containers/veracrypt_container.hc}"
 VERACRYPT_PATH="${VERACRYPT_PATH:-$HOME/veracrypt_container}"
 VERACRYPT_SIZE="${VERACRYPT_SIZE:-1G}"
+
+setup_plain() {
+  mkdir -p "$(dirname "$PLAIN_CONTAINER")"
+
+  if [[ ! -f "$PLAIN_CONTAINER" ]]; then
+    echo "Criando container sem criptografia em $PLAIN_CONTAINER com tamanho $PLAIN_SIZE..."
+    truncate -s "$PLAIN_SIZE" "$PLAIN_CONTAINER"
+  else
+    echo "Container sem criptografia ja existe: $PLAIN_CONTAINER"
+  fi
+
+  if ! sudo blkid "$PLAIN_CONTAINER" >/dev/null 2>&1; then
+    echo "Criando filesystem ext4 no container sem criptografia..."
+    sudo mkfs.ext4 -F "$PLAIN_CONTAINER"
+  fi
+
+  sudo mkdir -p "$PLAIN_PATH"
+
+  if ! mountpoint -q "$PLAIN_PATH"; then
+    echo "Montando container sem criptografia em $PLAIN_PATH..."
+    sudo mount -o loop "$PLAIN_CONTAINER" "$PLAIN_PATH"
+  fi
+
+  sudo chown "$USER:$USER" "$PLAIN_PATH"
+  echo "Sem criptografia pronto em: $PLAIN_PATH"
+}
 
 setup_luks() {
   if ! command -v cryptsetup >/dev/null 2>&1; then
@@ -100,6 +130,8 @@ setup_veracrypt() {
   echo "VeraCrypt pronto em: $VERACRYPT_PATH"
 }
 
+setup_plain
+echo
 setup_luks
 echo
 setup_veracrypt

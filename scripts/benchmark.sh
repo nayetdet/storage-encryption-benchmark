@@ -9,7 +9,7 @@ ITERATIONS="${ITERATIONS:-5}"
 BLOCK_MB="${BLOCK_MB:-4}"
 PYTHON_BIN="${PYTHON_BIN:-}"
 
-NORMAL_PATH="${NORMAL_PATH:-benchmark_data/sem_criptografia}"
+NORMAL_PATH="${NORMAL_PATH:-${PLAIN_PATH:-/mnt/plain_container}}"
 LUKS_PATH="${LUKS_PATH:-/mnt/luks_container}"
 VERACRYPT_PATH="${VERACRYPT_PATH:-$HOME/veracrypt_container}"
 
@@ -37,7 +37,7 @@ if ! command -v dd >/dev/null 2>&1; then
   exit 1
 fi
 
-mkdir -p "$RESULTS_DIR" "$GRAPH_DIR" "$NORMAL_PATH"
+mkdir -p "$RESULTS_DIR" "$GRAPH_DIR"
 export MPLCONFIGDIR="${MPLCONFIGDIR:-$RESULTS_DIR/matplotlib-cache}"
 mkdir -p "$MPLCONFIGDIR"
 rm -f "$OUTPUT"
