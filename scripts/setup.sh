@@ -14,6 +14,10 @@ VERACRYPT_CONTAINER="${VERACRYPT_CONTAINER:-containers/veracrypt_container.hc}"
 VERACRYPT_PATH="${VERACRYPT_PATH:-$HOME/veracrypt_container}"
 VERACRYPT_SIZE="${VERACRYPT_SIZE:-1G}"
 
+GOCRYPTFS_CIPHER_DIR="${GOCRYPTFS_CIPHER_DIR:-containers/gocryptfs_cipher}"
+GOCRYPTFS_PATH="${GOCRYPTFS_PATH:-$HOME/gocryptfs_plain}"
+GOCRYPTFS_MOUNT_OPTIONS="${GOCRYPTFS_MOUNT_OPTIONS:-}"
+
 setup_plain() {
   mkdir -p "$(dirname "$PLAIN_CONTAINER")"
 
@@ -130,13 +134,51 @@ setup_veracrypt() {
   echo "VeraCrypt pronto em: $VERACRYPT_PATH"
 }
 
+setup_gocryptfs() {
+  if ! command -v gocryptfs >/dev/null 2>&1; then
+    echo "gocryptfs nao encontrado. Pulando criptografia de diretorio." >&2
+    echo "Instale com: sudo apt install gocryptfs" >&2
+    return 0
+  fi
+
+  mkdir -p "$GOCRYPTFS_CIPHER_DIR" "$GOCRYPTFS_PATH"
+
+  if [[ ! -f "$GOCRYPTFS_CIPHER_DIR/gocryptfs.conf" ]]; then
+    echo "Inicializando diretorio criptografado gocryptfs em $GOCRYPTFS_CIPHER_DIR..."
+    echo "O gocryptfs vai pedir uma senha para proteger esse diretorio."
+    gocryptfs -init "$GOCRYPTFS_CIPHER_DIR"
+  else
+    echo "Diretorio gocryptfs ja inicializado: $GOCRYPTFS_CIPHER_DIR"
+  fi
+
+  if mountpoint -q "$GOCRYPTFS_PATH"; then
+    echo "gocryptfs ja esta montado em: $GOCRYPTFS_PATH"
+  else
+    echo "Montando gocryptfs em $GOCRYPTFS_PATH..."
+    if [[ -n "$GOCRYPTFS_MOUNT_OPTIONS" ]]; then
+      gocryptfs "$GOCRYPTFS_CIPHER_DIR" "$GOCRYPTFS_PATH" -o "$GOCRYPTFS_MOUNT_OPTIONS"
+    else
+      gocryptfs "$GOCRYPTFS_CIPHER_DIR" "$GOCRYPTFS_PATH"
+    fi
+  fi
+
+  if [[ ! -w "$GOCRYPTFS_PATH" ]]; then
+    echo "Aviso: gocryptfs montou, mas $GOCRYPTFS_PATH ainda nao esta com permissao de escrita." >&2
+    echo "Rode ./scripts/down.sh e depois ./scripts/setup.sh novamente, conferindo a senha do gocryptfs." >&2
+  fi
+
+  echo "Criptografia de diretorio pronta em: $GOCRYPTFS_PATH"
+}
+
 setup_plain
 echo
 setup_luks
 echo
 setup_veracrypt
 echo
+setup_gocryptfs
+echo
 echo "Setup finalizado."
 
 echo "Agora rode:"
-echo "  FILE_SIZE_MB=64 ITERATIONS=3 ./scripts/benchmark.sh"
+echo "  FILE_SIZE_MB=512 ITERATIONS=5 ./scripts/benchmark.sh"
